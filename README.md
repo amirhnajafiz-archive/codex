@@ -1,2 +1,2 @@
 # JDBNote
-Creating simple note keeper with Java and Sql
+Creating a simple note keeper with Java and SQL.
