@@ -17,7 +17,22 @@ public class Main
 	        String URL = "jdbc:sqlite:F:\\Desktop\\JDBC\\chinook.db";
 	        connection = DriverManager.getConnection(URL);
 
-	        System.out.println(">> Connected");
+	        Statement statement = null;
+	        String query = "select * from albums";
+
+	        try {
+	        	statement = connection.createStatement();
+	        	ResultSet resultSet = statement.executeQuery(query);
+	        	while (resultSet.next())
+				{
+					System.out.println(resultSet.getString("title"));
+				}
+			} catch (SQLException exc) {
+	        	exc.printStackTrace();
+			} finally {
+	        	if (statement != null) statement.close();
+			}
+
         } catch (SQLException e) {
 	        e.printStackTrace();
         } finally {
