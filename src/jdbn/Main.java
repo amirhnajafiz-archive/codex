@@ -60,18 +60,34 @@ public class Main
 	        	if (statement != null) statement.close();
 			}
 
-	        // Prepared statement test
+	        // Prepared statement test with a simple addition
 			String prepState = "insert into albums values (?, ?, ?);";
 
 			PreparedStatement preparedStatement = connection.prepareStatement(prepState);
 
-			preparedStatement.setInt(1, 400);
+			preparedStatement.setInt(1, 401);
 			preparedStatement.setString(2, "Concert for aliens");
 			preparedStatement.setInt(3, 10);
 
 			int rowsAffected = preparedStatement.executeUpdate();
 
 			System.out.println("Added successfully with rows affected: " + rowsAffected);
+
+
+			// Set multi prepared
+			preparedStatement.setInt(1, 402);
+			preparedStatement.setString(2, "Forget Me");
+			preparedStatement.setInt(3, 10);
+			preparedStatement.addBatch();
+
+			preparedStatement.setInt(1, 403);
+			preparedStatement.setString(2, "Title track");
+			preparedStatement.setInt(3, 10);
+			preparedStatement.addBatch();
+
+			int[] batchRowsAffected = preparedStatement.executeBatch();
+
+			System.out.println("Added successfully.");
 
         } catch (SQLException e) {
 	        e.printStackTrace();
