@@ -43,11 +43,45 @@ public class DataBaseConnector implements Runnable {
                 try {
                     statement.close();
                 } catch (SQLException ex) {
-                    System.out.println("Disconnection error : " + ex.getMessage());
+                    System.out.println("> Disconnection error : " + ex.getMessage());
                 }
             }
         }
         return "System failed";
+    }
+
+    public ArrayList<Note> loadNotes(String email)
+    {
+        Statement statement = null;
+        String query = "select * from NP_Notes where user_mail = " + email + ";";
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            ArrayList<Note> notes = new ArrayList<>();
+
+            while (resultSet.next())
+            {
+                Note note = new Note(resultSet.getString(2), resultSet.getString(3));
+                notes.add(note);
+            }
+
+            return notes;
+
+        } catch (SQLException exception) {
+            System.out.println("> Database error : " + exception.getMessage());
+            return null;
+        } finally {
+            if (statement != null)
+            {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.out.println("> Disconnection error : " + ex.getMessage());
+                }
+            }
+        }
     }
 
     public String userLogIn(String email)
