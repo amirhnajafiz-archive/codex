@@ -39,4 +39,13 @@ public class Note {
     {
         return date;
     }
+
+    @Override
+    public String toString() {
+        return "Note { " +
+                "header = '" + header + '\'' +
+                ", content = '" + content + '\'' +
+                ", date = " + date +
+                " }";
+    }
 }
