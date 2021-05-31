@@ -1,6 +1,5 @@
-package jdbn;
+package jdbn.DataBase;
 
-import java.math.BigDecimal;
 import java.sql.*;
 
 public class Main
