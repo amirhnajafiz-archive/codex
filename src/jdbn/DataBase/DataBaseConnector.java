@@ -83,6 +83,7 @@ public class DataBaseConnector implements Runnable
                 Note note = new Note(resultSet.getString(2), resultSet.getString(3));
                 notes.add(note);
             }
+            System.out.println("> Notes read : successfully");
             return notes;
         } catch (SQLException exception) {
             System.out.println("> Database error : " + exception.getMessage());

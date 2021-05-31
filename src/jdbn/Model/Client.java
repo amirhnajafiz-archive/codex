@@ -18,7 +18,10 @@ public class Client {
     public Client(String email)
     {
         this.email = email;
-        this.notes = new ArrayList<>();
+    }
+
+    public void setNotes(ArrayList<Note> notes) {
+        this.notes = notes == null ? new ArrayList<>() : notes;
     }
 
     public String getEmail()

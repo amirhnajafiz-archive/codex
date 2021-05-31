@@ -42,6 +42,8 @@ public class Application {
 
         System.out.println("Client '" + client.getEmail() + "' logged in.");
 
+        client.setNotes(dbc.loadNotes(client.getEmail()));
+
         boolean flag = true;
         while (flag)
         {
