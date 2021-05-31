@@ -57,7 +57,7 @@ public class Application {
                     break;
                 case "2":
                     System.out.println(">> Notes:");
-                    for(Note note : client.getNotes())
+                    for(Note note : client.getAllNotes())
                         System.out.println(note);
                     System.out.println(">> End.");
                     break;

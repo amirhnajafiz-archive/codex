@@ -10,6 +10,7 @@ public class Client {
     // Fields
     private String email;
     private ArrayList<Note> notes;
+    private ArrayList<Note> newNotes;
 
     /**
      * Constructor
@@ -18,6 +19,7 @@ public class Client {
     public Client(String email)
     {
         this.email = email;
+        newNotes = new ArrayList<>();
     }
 
     public void setNotes(ArrayList<Note> notes) {
@@ -31,10 +33,15 @@ public class Client {
 
     public void addNote(Note note)
     {
+        this.newNotes.add(note);
         this.notes.add(note);
     }
 
     public ArrayList<Note> getNotes() {
+        return newNotes;
+    }
+
+    public ArrayList<Note> getAllNotes() {
         return notes;
     }
 }
