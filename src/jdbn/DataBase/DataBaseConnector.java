@@ -73,7 +73,7 @@ public class DataBaseConnector implements Runnable
     public ArrayList<Note> loadNotes(String email)
     {
         Statement statement = null;
-        String query = "select * from NP_Notes where user_mail = " + email + ";"; // Query for getting user notes
+        String query = "select * from NP_Notes where user_mail = '" + email + "';"; // Query for getting user notes
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -107,7 +107,7 @@ public class DataBaseConnector implements Runnable
     public String userLogIn(String email)
     {
         Statement statement = null;
-        String query = "select * from NP_Users where user_mail = " + email + ";"; // Query for getting the user
+        String query = "select * from NP_Users where user_mail='" + email + "';"; // Query for getting the user
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -115,7 +115,7 @@ public class DataBaseConnector implements Runnable
             {
                 return "User Exists";
             } else {
-                query = "insert into NP_Users(user_mail) values (" + email + ");"; // Registering login
+                query = "insert into NP_Users values ('" + email + "');"; // Registering login
                 int rowsAffected = statement.executeUpdate(query);
                 return "User Created";
             }
