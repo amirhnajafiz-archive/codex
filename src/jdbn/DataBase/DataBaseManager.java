@@ -4,90 +4,49 @@ import java.sql.*;
 
 public class DataBaseManager
 {
+	public static String mainTable = "NP_Users";
+	public static String dataTable = "NP_Notes";
+
+	public static void initializeTables(Connection connection)
+	{
+		try {
+			Statement statement = connection.createStatement();
+			String mainTableQuery = "create table " + mainTable + "("
+					+ "user_mail varchar(50),"
+					+ "primary key(user_mail)"
+					+ ");";
+			String dataTableQuery = "create table " + dataTable + "("
+					+ "user_mail varchar(50),"
+					+ "note_title varchar(50),"
+					+ "note_body varchar(200),"
+					+ "note_date date,"
+					+ "primary key (user_mail, note_title)"
+					+ ");";
+			statement.executeUpdate(mainTableQuery);
+			statement.executeUpdate(dataTableQuery);
+		} catch (SQLException ex) {
+			System.out.println("> Initialize error : " + ex.getMessage());
+		}
+	}
 
     public static void main(String[] args)
     {
 	    Connection connection = null;
-
 	    try {
 	        String URL = "jdbc:sqlite:F:\\Desktop\\JDBC\\chinook.db";
 	        connection = DriverManager.getConnection(URL);
-
-	        // Get metadata about tables
+	        // Get information about tables in our database
 			DatabaseMetaData metaData = connection.getMetaData();
-			ResultSet resultSeting = metaData.getTables(null, null, null, new String[]{"TABLE"});
+			ResultSet resultSetting = metaData.getTables(null, null, null, new String[]{"TABLE"});
 			System.out.println("Printing TABLE_TYPE \"TABLE\" ");
 			System.out.println("----------------------------------");
-			while(resultSeting.next())
+			while(resultSetting.next())
 			{
-				System.out.println(resultSeting.getString("TABLE_NAME"));
+				System.out.println(resultSetting.getString("TABLE_NAME"));
 			}
-
 			System.out.println("------");
-
-			// Get metadata about a Special table ( Albums )
-			ResultSet columns = metaData.getColumns(null,null, "albums", null);
-			while(columns.next())
-			{
-				String columnName = columns.getString("COLUMN_NAME");
-				String datatype = columns.getString("DATA_TYPE");
-				String columnsize = columns.getString("COLUMN_SIZE");
-				String decimaldigits = columns.getString("DECIMAL_DIGITS");
-				String isNullable = columns.getString("IS_NULLABLE");
-				String is_autoIncrment = columns.getString("IS_AUTOINCREMENT");
-				//Printing results
-				System.out.println(columnName + "---" + datatype + "---" + columnsize + "---" + decimaldigits + "---" + isNullable + "---" + is_autoIncrment);
-			}
-
-			System.out.println("------");
-
-	        // Simple statement test
-	        Statement statement = null;
-	        String query = "select * from albums";
-
-	        try {
-	        	statement = connection.createStatement();
-	        	ResultSet resultSet = statement.executeQuery(query);
-
-	        	while (resultSet.next())
-				{
-					System.out.println(resultSet.getString(2));
-				}
-			} catch (SQLException exc) {
-	        	exc.printStackTrace();
-			} finally {
-	        	if (statement != null) statement.close();
-			}
-
-	        // Prepared statement test with a simple addition
-			String prepState = "insert into albums values (?, ?, ?);";
-
-			PreparedStatement preparedStatement = connection.prepareStatement(prepState);
-
-			preparedStatement.setInt(1, 401);
-			preparedStatement.setString(2, "Concert for aliens");
-			preparedStatement.setInt(3, 10);
-
-			int rowsAffected = preparedStatement.executeUpdate();
-
-			System.out.println("Added successfully with rows affected: " + rowsAffected);
-
-
-			// Set multi prepared
-			preparedStatement.setInt(1, 402);
-			preparedStatement.setString(2, "Forget Me");
-			preparedStatement.setInt(3, 10);
-			preparedStatement.addBatch();
-
-			preparedStatement.setInt(1, 403);
-			preparedStatement.setString(2, "Title track");
-			preparedStatement.setInt(3, 10);
-			preparedStatement.addBatch();
-
-			int[] batchRowsAffected = preparedStatement.executeBatch();
-
-			System.out.println("Added successfully.");
-
+			// Creating my table
+			initializeTables(connection);
         } catch (SQLException e) {
 	        e.printStackTrace();
         } finally {
