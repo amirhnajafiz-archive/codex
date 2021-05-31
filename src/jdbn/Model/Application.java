@@ -7,7 +7,7 @@ public class Application {
 
     public static String getMenu()
     {
-        return "1. ADD NOTE\n" + "2. VIEW NOTES\n" + "3. EXIT";
+        return "1. ADD NOTE\n" + "2. VIEW NOTES\n" + "3. SAVE\n" + "4. EXIT";
     }
 
     public static Note createNote()
@@ -60,6 +60,9 @@ public class Application {
                     System.out.println(">> End.");
                     break;
                 case "3":
+                    dbc.saveNotes(client.getNotes(), client.getEmail());
+                    break;
+                case "4":
                     flag = false;
                     break;
                 default:

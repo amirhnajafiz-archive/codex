@@ -43,7 +43,7 @@ public class DataBaseConnector implements Runnable
                 statement.setString(1, email);
                 statement.setString(2, note.getHeader());
                 statement.setString(3, note.getContent());
-                statement.setDate(4, (Date) note.getDate());
+                statement.setDate(4, note.getDate());
                 statement.addBatch();
             }
             int[] batchRowsAffected = statement.executeBatch();

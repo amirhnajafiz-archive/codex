@@ -1,6 +1,6 @@
 package jdbn.Model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * The note class where we store the data of a single
@@ -11,7 +11,7 @@ public class Note {
     // Fields
     private String header;
     private String content;
-    private Date date;
+    private java.sql.Date date;
 
     /**
      * Constructor
@@ -22,7 +22,7 @@ public class Note {
     {
         this.header = header;
         this.content = content;
-        this.date = new Date();
+        this.date = new Date(System.currentTimeMillis());
     }
 
     public String getHeader()
@@ -35,7 +35,7 @@ public class Note {
         return content;
     }
 
-    public Date getDate()
+    public java.sql.Date getDate()
     {
         return date;
     }
