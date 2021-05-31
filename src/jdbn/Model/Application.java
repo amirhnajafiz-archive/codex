@@ -1,6 +1,7 @@
 package jdbn.Model;
 
 import java.util.Scanner;
+import jdbn.DataBase.DataBaseConnector;
 
 public class Application {
 
@@ -21,9 +22,21 @@ public class Application {
 
     public static void main(String[] args)
     {
+        DataBaseConnector dbc = new DataBaseConnector();
+        Thread runner = new Thread(dbc);
+        runner.start();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            System.out.println("> Process interrupt : " + e.getMessage());
+        }
+
         Scanner scanner = new Scanner(System.in);
         System.out.print(">> (Enter your email) ");
         String mail = scanner.next();
+
+        System.out.println(dbc.userLogIn(mail));
 
         Client client = new Client(mail);
 
@@ -55,5 +68,6 @@ public class Application {
         }
 
         System.out.println("Client '" + client.getEmail() + "' logged out.");
+        dbc.terminateProcess();
     }
 }
