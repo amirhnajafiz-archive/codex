@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class NoteServer
@@ -14,16 +16,16 @@ public class NoteServer
     public static void main(String[] args)
     {
         try (var listener = new ServerSocket(59090)) {
-            System.out.println("The date server is running...");
+            System.out.println("The JDB server is running ...");
 
             Thread terminate = new Thread(new Terminator(listener));
             terminate.start();
 
-            while (serverOn) {
-                try (var socket = listener.accept()) {
-                    var out = new PrintWriter(socket.getOutputStream(), true);
-                    out.println(new Date().toString());
-                }
+            ExecutorService service = Executors.newCachedThreadPool();
+
+            while (serverOn)
+            {
+                service.execute(new ClientHandler(listener.accept()));
             }
         } catch (IOException e) {
             System.out.println("> Server error : " + e.getMessage());
@@ -31,7 +33,8 @@ public class NoteServer
     }
 }
 
-class Terminator implements Runnable {
+class Terminator implements Runnable
+{
     private ServerSocket listener;
 
     public Terminator(ServerSocket listener)
@@ -40,9 +43,10 @@ class Terminator implements Runnable {
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         Scanner scanner = new Scanner(System.in);
-        System.out.print(">> Enter terminate to shutdown the server.");
+        System.out.println(">> Enter terminate to shutdown the server.");
         while (true)
         {
             String cmd = scanner.next();
