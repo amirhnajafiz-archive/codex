@@ -3,14 +3,14 @@ package jdbn.Model;
 import java.util.Scanner;
 import jdbn.DataBase.DataBaseConnector;
 
-public class Application {
+public class Application implements Runnable {
 
-    public static String getMenu()
+    private String getMenu()
     {
         return "1. ADD NOTE\n" + "2. VIEW NOTES\n" + "3. SAVE\n" + "4. EXIT";
     }
 
-    public static Note createNote()
+    private Note createNote()
     {
         Scanner scanner = new Scanner(System.in);
         System.out.print(">> (Title) ");
@@ -20,7 +20,8 @@ public class Application {
         return new Note(title, body);
     }
 
-    public static void main(String[] args)
+    @Override
+    public void run()
     {
         DataBaseConnector dbc = new DataBaseConnector();
         Thread runner = new Thread(dbc);

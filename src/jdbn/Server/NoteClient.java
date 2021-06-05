@@ -3,6 +3,7 @@ package jdbn.Server;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
+import jdbn.Model.Application;
 
 public class NoteClient
 {
@@ -16,10 +17,15 @@ public class NoteClient
             socket = new Socket(NoteClient.IP, NoteClient.PORT);
             System.out.println("> Connected successfully");
 
+            Thread application = new Thread(new Application());
+            application.join();
+
             Scanner in = new Scanner(socket.getInputStream());
             System.out.println("Server response: " + in.nextLine());
         } catch (IOException e) {
             System.out.println("> Connection error : " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.out.println("> Application error : " + e.getMessage());
         } finally {
             System.out.println("> Application closed");
         }
