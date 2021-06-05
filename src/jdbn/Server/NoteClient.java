@@ -17,11 +17,11 @@ public class NoteClient
             socket = new Socket(NoteClient.IP, NoteClient.PORT);
             System.out.println("> Connected successfully");
 
-            Thread application = new Thread(new Application());
+            Thread application = new Thread(new Application(socket));
             application.join();
 
-            Scanner in = new Scanner(socket.getInputStream());
-            System.out.println("Server response: " + in.nextLine());
+            socket.close();
+
         } catch (IOException e) {
             System.out.println("> Connection error : " + e.getMessage());
         } catch (InterruptedException e) {

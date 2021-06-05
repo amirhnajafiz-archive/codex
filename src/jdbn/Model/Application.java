@@ -1,9 +1,17 @@
 package jdbn.Model;
 
+import java.net.Socket;
 import java.util.Scanner;
 import jdbn.DataBase.DataBaseConnector;
 
 public class Application implements Runnable {
+
+    private Socket socket;
+
+    public Application(Socket socket)
+    {
+        this.socket = socket;
+    }
 
     private String getMenu()
     {
