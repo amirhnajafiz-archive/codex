@@ -1,5 +1,8 @@
 package jdbn.Model;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import jdbn.DataBase.DataBaseConnector;
@@ -31,57 +34,65 @@ public class Application implements Runnable {
     @Override
     public void run()
     {
-        DataBaseConnector dbc = new DataBaseConnector();
-        Thread runner = new Thread(dbc);
-        runner.start();
+        try (
+                InputStreamReader isr = new InputStreamReader(socket.getInputStream());
+                OutputStreamWriter osr = new OutputStreamWriter(socket.getOutputStream());
+        ) {
+            DataBaseConnector dbc = new DataBaseConnector();
+            Thread runner = new Thread(dbc);
+            runner.start();
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            System.out.println("> Process interrupt : " + e.getMessage());
-        }
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.print(">> (Enter your email) ");
-        String mail = scanner.next();
-
-        System.out.println(dbc.userLogIn(mail));
-
-        Client client = new Client(mail);
-
-        System.out.println("Client '" + client.getEmail() + "' logged in.");
-
-        client.setNotes(dbc.loadNotes(client.getEmail()));
-
-        boolean flag = true;
-        while (flag)
-        {
-            System.out.println(getMenu());
-            String command = scanner.next();
-
-            switch (command)
-            {
-                case "1":
-                    client.addNote(createNote());
-                    break;
-                case "2":
-                    System.out.println(">> Notes:");
-                    for(Note note : client.getAllNotes())
-                        System.out.println(note);
-                    System.out.println(">> End.");
-                    break;
-                case "3":
-                    dbc.saveNotes(client.getNotes(), client.getEmail());
-                    break;
-                case "4":
-                    flag = false;
-                    break;
-                default:
-                    System.out.println(">> Wrong input !");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("> Process interrupt : " + e.getMessage());
             }
-        }
 
-        System.out.println("Client '" + client.getEmail() + "' logged out.");
-        dbc.terminateProcess();
+            Scanner scanner = new Scanner(System.in);
+            System.out.print(">> (Enter your email) ");
+            String mail = scanner.next();
+
+            System.out.println(dbc.userLogIn(mail));
+
+            Client client = new Client(mail);
+
+            System.out.println("Client '" + client.getEmail() + "' logged in.");
+
+            client.setNotes(dbc.loadNotes(client.getEmail()));
+
+            boolean flag = true;
+            while (flag) {
+                System.out.println(getMenu());
+                String command = scanner.next();
+
+                switch (command) {
+                    case "1":
+                        client.addNote(createNote());
+                        break;
+                    case "2":
+                        System.out.println(">> Notes:");
+                        for (Note note : client.getAllNotes())
+                            System.out.println(note);
+                        System.out.println(">> End.");
+                        break;
+                    case "3":
+                        dbc.saveNotes(client.getNotes(), client.getEmail());
+                        break;
+                    case "4":
+                        flag = false;
+                        break;
+                    default:
+                        System.out.println(">> Wrong input !");
+                }
+            }
+
+            System.out.println("Client '" + client.getEmail() + "' logged out.");
+            dbc.terminateProcess();
+
+        } catch (IOException e) {
+            System.out.println("> Connection error : " + e.getMessage());
+        } finally {
+            System.out.println("> Program closed");
+        }
     }
 }
