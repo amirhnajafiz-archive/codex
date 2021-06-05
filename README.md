@@ -9,8 +9,6 @@ Creating a simple note keeper with Java and SQL.
 
 ### Todo
 <ul>
-  <li>Create server socket</li>
-  <li>Create client socket</li>
   <li>Make a multi thread server</li>
   <li>Connect user to server and database</li>
   <li>Test the progress</li>
@@ -22,4 +20,6 @@ Creating a simple note keeper with Java and SQL.
 
 ### Done
 <ul>
+  <li>Create server socket</li>
+  <li>Create client socket</li>
 </ul>
