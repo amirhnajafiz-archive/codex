@@ -52,12 +52,14 @@ public class Application implements Runnable {
             System.out.print(">> (Enter your email) ");
             String mail = scanner.next();
 
+            // todo: Send this to server and get the response
             System.out.println(dbc.userLogIn(mail));
 
             Client client = new Client(mail);
 
             System.out.println("Client '" + client.getEmail() + "' logged in.");
 
+            // todo: Send this to server and load the notes
             client.setNotes(dbc.loadNotes(client.getEmail()));
 
             boolean flag = true;
@@ -76,6 +78,7 @@ public class Application implements Runnable {
                         System.out.println(">> End.");
                         break;
                     case "3":
+                        // todo: Send this to server and save the data
                         dbc.saveNotes(client.getNotes(), client.getEmail());
                         break;
                     case "4":
@@ -87,7 +90,6 @@ public class Application implements Runnable {
             }
 
             System.out.println("Client '" + client.getEmail() + "' logged out.");
-            dbc.terminateProcess();
 
         } catch (IOException e) {
             System.out.println("> Connection error : " + e.getMessage());
