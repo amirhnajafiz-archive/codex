@@ -1,5 +1,7 @@
 package jdbn.Server;
 
+import jdbn.DataBase.DataBaseConnector;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -8,10 +10,12 @@ import java.util.Scanner;
 public class ClientHandler implements Runnable
 {
     private Socket socket;
+    private DataBaseConnector dbs;
 
-    public ClientHandler(Socket socket)
+    public ClientHandler(Socket socket, DataBaseConnector dbs)
     {
         this.socket = socket;
+        this.dbs = dbs;
     }
 
     @Override

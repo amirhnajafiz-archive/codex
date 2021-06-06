@@ -32,7 +32,7 @@ public class NoteServer
 
             while (serverOn)
             {
-                service.execute(new ClientHandler(listener.accept()));
+                service.execute(new ClientHandler(listener.accept(), dbc));
             }
         } catch (IOException e) {
             System.out.println("> Server error : " + e.getMessage());
