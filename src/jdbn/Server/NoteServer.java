@@ -1,5 +1,7 @@
 package jdbn.Server;
 
+import jdbn.DataBase.DataBaseConnector;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -15,11 +17,16 @@ public class NoteServer
 
     public static void main(String[] args)
     {
+        DataBaseConnector dbc = null;
         try (var listener = new ServerSocket(59090)) {
             System.out.println("The JDB server is running ...");
 
             Thread terminate = new Thread(new Terminator(listener));
             terminate.start();
+
+            dbc = new DataBaseConnector();
+            Thread runner = new Thread(dbc);
+            runner.start();
 
             ExecutorService service = Executors.newCachedThreadPool();
 
@@ -29,6 +36,11 @@ public class NoteServer
             }
         } catch (IOException e) {
             System.out.println("> Server error : " + e.getMessage());
+        } finally {
+            if (dbc != null)
+            {
+                dbc.terminateProcess();
+            }
         }
     }
 }
