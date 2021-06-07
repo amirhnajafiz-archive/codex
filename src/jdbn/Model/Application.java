@@ -59,8 +59,13 @@ public class Application implements Runnable {
 
             System.out.println("Client '" + client.getEmail() + "' logged in.");
 
-            // todo: Send this to server and load the notes
-            client.setNotes(dbc.loadNotes(client.getEmail()));
+            while (!isr.getEncoding().equals("EOF"))
+            {
+                String title = isr.getEncoding();
+                String content = isr.getEncoding();
+                Note note = new Note(title, content);
+                client.addNote(note);
+            }
 
             boolean flag = true;
             while (flag) {

@@ -1,10 +1,12 @@
 package jdbn.Server;
 
 import jdbn.DataBase.DataBaseConnector;
+import jdbn.Model.Note;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ClientHandler implements Runnable
@@ -29,6 +31,16 @@ public class ClientHandler implements Runnable
         {
             String user_mail = in.next();
             out.print(dbs.userLogIn(user_mail));
+
+            ArrayList<Note> user_notes = dbs.loadNotes(user_mail);
+
+            out.print("SOF");
+            for (Note note : user_notes)
+            {
+                out.print(note.getHeader());
+                out.print(note.getContent());
+            }
+            out.print("EOF");
 
         } catch (Exception e) {
             System.out.println(">> Client error:" + e.getMessage());
