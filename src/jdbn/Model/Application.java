@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import jdbn.DataBase.DataBaseConnector;
 
 public class Application implements Runnable {
 
@@ -38,10 +37,6 @@ public class Application implements Runnable {
                 InputStreamReader isr = new InputStreamReader(socket.getInputStream());
                 OutputStreamWriter osr = new OutputStreamWriter(socket.getOutputStream());
         ) {
-            DataBaseConnector dbc = new DataBaseConnector();
-            Thread runner = new Thread(dbc);
-            runner.start();
-
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -83,7 +78,6 @@ public class Application implements Runnable {
                         System.out.println(">> End.");
                         break;
                     case "3":
-                        dbc.saveNotes(client.getNotes(), client.getEmail());
                         osr.write("SOF");
                         for (Note note : client.getNotes())
                         {
