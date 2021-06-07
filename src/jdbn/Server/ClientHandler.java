@@ -29,11 +29,9 @@ public class ClientHandler implements Runnable
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
              )
         {
-
-            out.flush();
-
-            String user_mail = in.nextLine();
-            out.print(dbs.userLogIn(user_mail));
+            String user_mail = in.next();
+            String msg = dbs.userLogIn(user_mail);
+            out.print(msg);
 
             ArrayList<Note> user_notes = dbs.loadNotes(user_mail);
 

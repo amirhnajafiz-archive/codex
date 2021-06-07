@@ -3,9 +3,7 @@ package jdbn.Server;
 import jdbn.DataBase.DataBaseConnector;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,6 +17,7 @@ public class NoteServer
     {
         DataBaseConnector dbc = null;
         ExecutorService service = null;
+
         try (var listener = new ServerSocket(59090)) {
             System.out.println("The JDB server is running ...");
 
@@ -28,6 +27,16 @@ public class NoteServer
             dbc = new DataBaseConnector();
             Thread runner = new Thread(dbc);
             runner.start();
+
+            Runtime runtime = Runtime.getRuntime();
+            DataBaseConnector finalDbc = dbc;
+            runtime.addShutdownHook(new Thread() {
+                @Override
+                public void run()
+                {
+                    finalDbc.terminateProcess();
+                }
+            });
 
             service = Executors.newCachedThreadPool();
 

@@ -35,7 +35,7 @@ public class Application {
 
     public void run() {
         try (
-                PrintWriter osr = new PrintWriter(socket.getOutputStream(), true);
+                OutputStreamWriter osr = new OutputStreamWriter(socket.getOutputStream());
                 Scanner isr = new Scanner(socket.getInputStream())
         ) {
             try {
@@ -50,14 +50,14 @@ public class Application {
             System.out.print(">> (Enter your email) ");
             String mail = scanner.next();
 
-            osr.print(mail);
+            osr.write(mail);
             System.out.println(isr.next());
 
             Client client = new Client(mail);
 
             System.out.println("Client '" + client.getEmail() + "' logged in.");
 
-            while (!isr.next().equals("EOF")) {
+            while (!isr.toString().equals("EOF")) {
                 String title = isr.next();
                 String content = isr.next();
                 Note note = new Note(title, content);
@@ -80,12 +80,12 @@ public class Application {
                         System.out.println(">> End.");
                         break;
                     case "3":
-                        osr.print("SOF");
+                        osr.write("SOF");
                         for (Note note : client.getNotes()) {
-                            osr.print(note.getHeader());
-                            osr.print(note.getContent());
+                            osr.write(note.getHeader());
+                            osr.write(note.getContent());
                         }
-                        osr.print("EOF");
+                        osr.write("EOF");
                         flag = false;
                         break;
                     case "4":
