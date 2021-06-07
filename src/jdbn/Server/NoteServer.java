@@ -18,6 +18,7 @@ public class NoteServer
     public static void main(String[] args)
     {
         DataBaseConnector dbc = null;
+        ExecutorService service = null;
         try (var listener = new ServerSocket(59090)) {
             System.out.println("The JDB server is running ...");
 
@@ -28,18 +29,23 @@ public class NoteServer
             Thread runner = new Thread(dbc);
             runner.start();
 
-            ExecutorService service = Executors.newCachedThreadPool();
+            service = Executors.newCachedThreadPool();
 
             while (serverOn)
             {
                 service.execute(new ClientHandler(listener.accept(), dbc));
             }
+
         } catch (IOException e) {
             System.out.println("> Server error : " + e.getMessage());
         } finally {
             if (dbc != null)
             {
                 dbc.terminateProcess();
+            }
+            if (service != null)
+            {
+                service.shutdownNow();
             }
         }
     }

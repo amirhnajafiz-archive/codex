@@ -35,14 +35,16 @@ public class Application {
 
     public void run() {
         try (
-                Scanner isr = new Scanner(socket.getInputStream());
-                PrintWriter osr = new PrintWriter(socket.getOutputStream());
+                PrintWriter osr = new PrintWriter(socket.getOutputStream(), true);
+                Scanner isr = new Scanner(socket.getInputStream())
         ) {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 System.out.println("> Process interrupt : " + e.getMessage());
             }
+
+            osr.flush();
 
             Scanner scanner = new Scanner(System.in);
             System.out.print(">> (Enter your email) ");

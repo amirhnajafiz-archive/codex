@@ -26,10 +26,13 @@ public class ClientHandler implements Runnable
         System.out.println(">> Connected: " + socket);
         try (
                 Scanner in = new Scanner(socket.getInputStream());
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
              )
         {
-            String user_mail = in.next();
+
+            out.flush();
+
+            String user_mail = in.nextLine();
             out.print(dbs.userLogIn(user_mail));
 
             ArrayList<Note> user_notes = dbs.loadNotes(user_mail);
