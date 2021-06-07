@@ -52,8 +52,8 @@ public class Application implements Runnable {
             System.out.print(">> (Enter your email) ");
             String mail = scanner.next();
 
-            // todo: Send this to server and get the response
-            System.out.println(dbc.userLogIn(mail));
+            osr.write(mail);
+            System.out.println(isr.getEncoding());
 
             Client client = new Client(mail);
 

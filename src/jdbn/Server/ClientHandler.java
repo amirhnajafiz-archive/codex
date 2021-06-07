@@ -22,12 +22,14 @@ public class ClientHandler implements Runnable
     public void run()
     {
         System.out.println(">> Connected: " + socket);
-        try {
-            Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            while (in.hasNextLine()) {
-                out.println(in.nextLine().toUpperCase());
-            }
+        try (
+                Scanner in = new Scanner(socket.getInputStream());
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             )
+        {
+            String user_mail = in.next();
+            out.print(dbs.userLogIn(user_mail));
+
         } catch (Exception e) {
             System.out.println(">> Client error:" + e.getMessage());
         } finally {
