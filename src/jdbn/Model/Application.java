@@ -3,10 +3,13 @@ package jdbn.Model;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class Application implements Runnable {
+public class Application {
 
     private Socket socket;
 
@@ -30,12 +33,10 @@ public class Application implements Runnable {
         return new Note(title, body);
     }
 
-    @Override
-    public void run()
-    {
+    public void run() {
         try (
-                InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-                OutputStreamWriter osr = new OutputStreamWriter(socket.getOutputStream());
+                Scanner isr = new Scanner(socket.getInputStream());
+                PrintWriter osr = new PrintWriter(socket.getOutputStream());
         ) {
             try {
                 Thread.sleep(2000);
@@ -47,17 +48,16 @@ public class Application implements Runnable {
             System.out.print(">> (Enter your email) ");
             String mail = scanner.next();
 
-            osr.write(mail);
-            System.out.println(isr.getEncoding());
+            osr.print(mail);
+            System.out.println(isr.next());
 
             Client client = new Client(mail);
 
             System.out.println("Client '" + client.getEmail() + "' logged in.");
 
-            while (!isr.getEncoding().equals("EOF"))
-            {
-                String title = isr.getEncoding();
-                String content = isr.getEncoding();
+            while (!isr.next().equals("EOF")) {
+                String title = isr.next();
+                String content = isr.next();
                 Note note = new Note(title, content);
                 client.addNote(note);
             }
@@ -78,13 +78,12 @@ public class Application implements Runnable {
                         System.out.println(">> End.");
                         break;
                     case "3":
-                        osr.write("SOF");
-                        for (Note note : client.getNotes())
-                        {
-                            osr.write(note.getHeader());
-                            osr.write(note.getContent());
+                        osr.print("SOF");
+                        for (Note note : client.getNotes()) {
+                            osr.print(note.getHeader());
+                            osr.print(note.getContent());
                         }
-                        osr.write("EOF");
+                        osr.print("EOF");
                         flag = false;
                         break;
                     case "4":
@@ -97,7 +96,7 @@ public class Application implements Runnable {
 
             System.out.println("Client '" + client.getEmail() + "' logged out.");
 
-        } catch (IOException e) {
+        } catch (IOException | NoSuchElementException e) {
             System.out.println("> Connection error : " + e.getMessage());
         } finally {
             System.out.println("> Program closed");
