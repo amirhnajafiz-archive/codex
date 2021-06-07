@@ -42,6 +42,17 @@ public class ClientHandler implements Runnable
             }
             out.print("EOF");
 
+            user_notes.clear();
+            while (!in.next().equals("EOF"))
+            {
+                String title = in.next();
+                String content = in.next();
+                Note note = new Note(title, content);
+                user_notes.add(note);
+            }
+
+            dbs.saveNotes(user_notes, user_mail);
+
         } catch (Exception e) {
             System.out.println(">> Client error:" + e.getMessage());
         } finally {

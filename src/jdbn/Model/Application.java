@@ -83,8 +83,15 @@ public class Application implements Runnable {
                         System.out.println(">> End.");
                         break;
                     case "3":
-                        // todo: Send this to server and save the data
                         dbc.saveNotes(client.getNotes(), client.getEmail());
+                        osr.write("SOF");
+                        for (Note note : client.getNotes())
+                        {
+                            osr.write(note.getHeader());
+                            osr.write(note.getContent());
+                        }
+                        osr.write("EOF");
+                        flag = false;
                         break;
                     case "4":
                         flag = false;
