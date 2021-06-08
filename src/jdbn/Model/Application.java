@@ -1,18 +1,25 @@
 package jdbn.Model;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Application is the client side app, which will create an user-interface
+ * for our clients, to run the application on their systems.
+ *
+ */
 public class Application {
 
     private Socket socket;
 
+    /**
+     * Application constructor.
+     *
+     * @param socket Opened socket to the server
+     */
     public Application(Socket socket)
     {
         this.socket = socket;
@@ -33,6 +40,10 @@ public class Application {
         return new Note(title, body);
     }
 
+    /**
+     * This method creates a loop for our user application.
+     *
+     */
     public void run() {
         try (
                 OutputStreamWriter osr = new OutputStreamWriter(socket.getOutputStream());
@@ -95,9 +106,7 @@ public class Application {
                         System.out.println(">> Wrong input !");
                 }
             }
-
             System.out.println("Client '" + client.getEmail() + "' logged out.");
-
         } catch (IOException | NoSuchElementException e) {
             System.out.println("> Connection error : " + e.getMessage());
         } finally {

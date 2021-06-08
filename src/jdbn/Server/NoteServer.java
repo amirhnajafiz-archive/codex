@@ -1,18 +1,26 @@
 package jdbn.Server;
 
 import jdbn.DataBase.DataBaseConnector;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+/**
+ * Note server is our application multi-thread server which connects to
+ * a mySQL database and handles the clients.
+ *
+ */
 public class NoteServer
 {
     public static boolean serverOn = true;
 
+    /**
+     * Server starter method.
+     *
+     * @param args list of input arguments
+     */
     public static void main(String[] args)
     {
         DataBaseConnector dbc = null;
@@ -60,10 +68,20 @@ public class NoteServer
     }
 }
 
+/**
+ * Terminator is a thread that allows us to shutdown the server
+ * at anytime we want, In case of anything goes wrong.
+ *
+ */
 class Terminator implements Runnable
 {
     private ServerSocket listener;
 
+    /**
+     * Terminator constructor.
+     *
+     * @param listener Server socket
+     */
     public Terminator(ServerSocket listener)
     {
         this.listener = listener;

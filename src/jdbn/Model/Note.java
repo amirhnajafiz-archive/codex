@@ -14,7 +14,8 @@ public class Note {
     private java.sql.Date date;
 
     /**
-     * Constructor
+     * Constructor of Note class.
+     *
      * @param header Note title
      * @param content Note body
      */
@@ -25,16 +26,31 @@ public class Note {
         this.date = new Date(System.currentTimeMillis());
     }
 
+    /**
+     * Header getter method.
+     *
+     * @return note header
+     */
     public String getHeader()
     {
         return header;
     }
 
+    /**
+     * Content getter method.
+     *
+     * @return note content
+     */
     public String getContent()
     {
         return content;
     }
 
+    /**
+     * Date getter method.
+     *
+     * @return note last modified date
+     */
     public java.sql.Date getDate()
     {
         return date;

@@ -5,8 +5,18 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.Vector;
 
+/**
+ * Database Manager is our server side program that
+ * allows the website admin to get connected to database and
+ * check the tables or modify them.
+ *
+ */
 public class DataBaseManager
 {
+	/**
+	 * Tables names.
+	 *
+	 */
 	public static String mainTable = "NP_Users";
 	public static String dataTable = "NP_Notes";
 
@@ -242,6 +252,11 @@ public class DataBaseManager
 		System.out.println("------");
 	}
 
+	/**
+	 * The Manager main program starts by this method.
+	 *
+	 * @param args list of starting arguments
+	 */
     public static void main(String[] args)
     {
 	    Connection connection = null;

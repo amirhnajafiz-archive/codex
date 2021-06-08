@@ -1,25 +1,15 @@
 # JDBNote
-Creating a simple note keeper with Java and SQL.
-
-## Links
-[Setup](https://www.infoworld.com/article/3388036/what-is-jdbc-introduction-to-java-database-connectivity.html)
-
-[Driver](https://www.progress.com/blogs/jdbc-tutorial-extracting-database-metadata-via-jdbc-driver)
+JDBNote is a full application that creates a Multi-Thread server to communicate with
+clients. It also uses mySQL database to store the users information.
 
 
-### Todo
+### Links
 <ul>
-  <li>Make a multi thread server</li>
-  <li>Connect user to server and database</li>
-  <li>Test the progress</li>
+    <li>
+        <a href="https://www.infoworld.com/article/3388036/what-is-jdbc-introduction-to-java-database-connectivity.html">Setup</a>
+    </li>
+    <li>
+        <a href="https://www.progress.com/blogs/jdbc-tutorial-extracting-database-metadata-via-jdbc-driver">Driver</a>
+    </li>
 </ul>
 
-### Is doing
-<ul>
-</ul>
-
-### Done
-<ul>
-  <li>Create server socket</li>
-  <li>Create client socket</li>
-</ul>

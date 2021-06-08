@@ -2,18 +2,28 @@ package jdbn.Server;
 
 import jdbn.DataBase.DataBaseConnector;
 import jdbn.Model.Note;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Client handler is a server side thread to handle client
+ * in our multi-thread server.
+ *
+ */
 public class ClientHandler implements Runnable
 {
     private Socket socket;
     private DataBaseConnector dbs;
 
+    /**
+     * Handler constructor.
+     *
+     * @param socket opened socket between user and server
+     * @param dbs database controller instance
+     */
     public ClientHandler(Socket socket, DataBaseConnector dbs)
     {
         this.socket = socket;

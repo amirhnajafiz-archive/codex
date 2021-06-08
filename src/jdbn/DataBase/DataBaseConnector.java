@@ -28,11 +28,11 @@ public class DataBaseConnector implements Runnable
 
     /**
      * This method stores our note into database.
+     *
      * @param notes list of notes
      * @param email user email
-     * @return insertion message
      */
-    public String saveNotes(ArrayList<Note> notes, String email)
+    public void saveNotes(ArrayList<Note> notes, String email)
     {
         String query = "insert into NP_Notes values(?, ?, ?, ?);"; // Insertion query
         PreparedStatement statement = null;
@@ -49,7 +49,6 @@ public class DataBaseConnector implements Runnable
             int[] batchRowsAffected = statement.executeBatch();
             System.out.println("> Database updated : successfully "
                     + " | Rows effected : " + Arrays.toString(batchRowsAffected));
-            return "Complete";
         } catch (SQLException exception) {
             System.out.println("> Database error : " + exception.getMessage());
         } finally {
@@ -62,11 +61,11 @@ public class DataBaseConnector implements Runnable
                 }
             }
         }
-        return "System failed";
     }
 
     /**
      * This method gets a user notes from database.
+     *
      * @param email user email
      * @return the list of stored notes
      */
@@ -101,7 +100,8 @@ public class DataBaseConnector implements Runnable
     }
 
     /**
-     * This method checks the user register and logging in status
+     * This method checks the user register and logging in status.
+     *
      * @param email user email
      * @return login message
      */
@@ -135,6 +135,10 @@ public class DataBaseConnector implements Runnable
     }
 
     @Override
+    /*
+      This method is our connector main method to execute its runtime
+      program.
+     */
     public void run() {
         try {
             connection = DriverManager.getConnection(URL);
