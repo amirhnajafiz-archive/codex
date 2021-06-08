@@ -1,6 +1,8 @@
 package jdbn.DataBase;
 
 import java.sql.*;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Vector;
 
 public class DataBaseManager
@@ -30,6 +32,38 @@ public class DataBaseManager
 			statement.executeUpdate(dataTableQuery);
 		} catch (SQLException ex) {
 			System.out.println("> Initialize error : " + ex.getMessage());
+		}
+	}
+
+	public static void insertManualUser(Connection connection, Vector<String> newList) throws SQLException
+	{
+		PreparedStatement preparedStatement = connection.prepareStatement("insert into '" + mainTable + "'" + "values(?);");
+		for (String s: newList)
+		{
+			preparedStatement.setString(1, s);
+			preparedStatement.addBatch();
+		}
+		preparedStatement.executeBatch();
+	}
+
+	public static void removeManualUser(Connection connection, Vector<String> newList) throws SQLException
+	{
+		Statement statement = connection.createStatement();
+		for (String s : newList)
+		{
+			String query = "delete from '" + mainTable + "'" + "where user_mail = '" + s + "';";
+			statement.executeUpdate(query);
+			removeManualNote(connection, new Vector<>(Collections.singletonList(s)));
+		}
+	}
+
+	public static void removeManualNote(Connection connection, Vector<String> newList) throws SQLException
+	{
+		Statement statement = connection.createStatement();
+		for (String s : newList)
+		{
+			String query = "delete from '" + dataTable + "'" + "where user_mail = '" + s + "';";
+			statement.executeUpdate(query);
 		}
 	}
 
