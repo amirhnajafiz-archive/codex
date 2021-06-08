@@ -13,6 +13,19 @@ public class DataBaseManager
 	private static String users_query = "select * from '" + DataBaseManager.mainTable + "'";
 	private static String data_query = "select * from '" + DataBaseManager.dataTable + "'";
 
+	private static void helpMenu()
+	{
+		System.out.println(
+						"\nGuid:\n" +
+						"init 			: initialize the tables of JDBNote\n" +
+						"insert users   : insert manual users to database\n" +
+						"insert note    : insert new notes to database\n" +
+						"delete user    : remove users from database\n" +
+						"delete note    : remove notes from database\n" +
+						"terminate      : exit from JDBNote database manager\n"
+		);
+	}
+
 	private static Vector<String> getInput(Scanner scanner)
     {
         Vector<String> vector = new Vector<>();
@@ -58,6 +71,7 @@ public class DataBaseManager
 		boolean flag = true;
 		String order;
 
+		helpMenu();
 		System.out.println(">> Welcome to JDBNote database manager:");
 		while (flag)
 		{
@@ -79,6 +93,9 @@ public class DataBaseManager
 						break;
 					case "delete note":
 						removeManualNote(connection, getInput(scanner));
+						break;
+					case "help":
+						helpMenu();
 						break;
 					case "terminate":
 						flag = false;
