@@ -13,6 +13,45 @@ public class DataBaseManager
 	private static String users_query = "select * from '" + DataBaseManager.mainTable + "'";
 	private static String data_query = "select * from '" + DataBaseManager.dataTable + "'";
 
+	private static Vector<String> getInput(Scanner scanner)
+    {
+        Vector<String> vector = new Vector<>();
+        String temp;
+        boolean flag = true;
+        while (flag)
+        {
+            System.out.print("> (END for exit) ");
+            temp = scanner.next();
+            if (temp.equals("END"))
+                flag = false;
+            else
+                vector.add(temp);
+        }
+        return vector;
+    }
+
+    private static Vector<String[]> getNotesInput(Scanner scanner)
+    {
+        Vector<String[]> vector = new Vector<>();
+        String temp;
+        boolean flag = true;
+        while (flag)
+        {
+            System.out.print("> ( email,title,content | END for exit ) ");
+            temp = scanner.nextLine();
+            if (temp.equals("END"))
+                flag = false;
+            else {
+                String[] array = temp.split(",");
+                if (array.length == 3)
+                    vector.add(array);
+                else
+                    System.out.println(">>> Not valid data");
+            }
+        }
+        return vector;
+    }
+
 	private static void user_interface(Connection connection)
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -30,16 +69,16 @@ public class DataBaseManager
 						initializeTables(connection);
 						break;
 					case "insert users":
-						insertManualUser(connection, new Vector<>());
+						insertManualUser(connection, getInput(scanner));
 						break;
 					case "insert note":
-						insertManualNote(connection, new Vector<>());
+						insertManualNote(connection, getNotesInput(scanner));
 						break;
 					case "delete user":
-						removeManualUser(connection, new Vector<>());
+						removeManualUser(connection, getInput(scanner));
 						break;
 					case "delete note":
-						removeManualNote(connection, new Vector<>());
+						removeManualNote(connection, getInput(scanner));
 						break;
 					case "terminate":
 						flag = false;
