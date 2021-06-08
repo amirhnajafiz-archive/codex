@@ -1,6 +1,7 @@
 package jdbn.DataBase;
 
 import java.sql.*;
+import java.util.Vector;
 
 public class DataBaseManager
 {
@@ -32,6 +33,23 @@ public class DataBaseManager
 		}
 	}
 
+	public static void insertManualNote(Connection connection, Vector<String[]> newList) throws SQLException
+	{
+		PreparedStatement preparedStatement = connection.prepareStatement("insert into '" + dataTable + "'" + "values(?, ?, ?, ?);");
+
+		for (String[] strings : newList)
+		{
+			for (int i = 1; i < 4; i++)
+			{
+				preparedStatement.setString(i, strings[i-1]);
+			}
+			preparedStatement.setDate(4, new Date(System.currentTimeMillis()));
+			preparedStatement.addBatch();
+		}
+
+		preparedStatement.executeUpdate();
+	}
+
     public static void main(String[] args)
     {
 	    Connection connection = null;
@@ -49,7 +67,7 @@ public class DataBaseManager
 				System.out.println(resultSetting.getString("TABLE_NAME"));
 			}
 			System.out.println("------");
-			System.out.println("------");
+			System.out.println("------\n");
 
 			// Get information about users
 			Statement statement = connection.createStatement();
@@ -63,7 +81,7 @@ public class DataBaseManager
 				System.out.println("User: " + users.getString(1));
 			}
 			System.out.println("------");
-			System.out.println("------");
+			System.out.println("------\n");
 
 			System.out.println("Printing \"Notes\"");
 			System.out.println("----------------------------------");
