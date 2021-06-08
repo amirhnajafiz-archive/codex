@@ -95,7 +95,7 @@ public class DataBaseManager
 		}
 	}
 
-	public static void initializeTables(Connection connection)
+	private static void initializeTables(Connection connection)
 	{
 		try {
 			Statement statement = connection.createStatement();
@@ -117,7 +117,7 @@ public class DataBaseManager
 		}
 	}
 
-	public static void insertManualUser(Connection connection, Vector<String> newList) throws SQLException
+	private static void insertManualUser(Connection connection, Vector<String> newList) throws SQLException
 	{
 		PreparedStatement preparedStatement = connection.prepareStatement("insert into '" + mainTable + "'" + "values(?);");
 		for (String s: newList)
@@ -128,7 +128,7 @@ public class DataBaseManager
 		preparedStatement.executeBatch();
 	}
 
-	public static void removeManualUser(Connection connection, Vector<String> newList) throws SQLException
+	private static void removeManualUser(Connection connection, Vector<String> newList) throws SQLException
 	{
 		Statement statement = connection.createStatement();
 		for (String s : newList)
@@ -139,7 +139,7 @@ public class DataBaseManager
 		}
 	}
 
-	public static void removeManualNote(Connection connection, Vector<String> newList) throws SQLException
+	private static void removeManualNote(Connection connection, Vector<String> newList) throws SQLException
 	{
 		Statement statement = connection.createStatement();
 		for (String s : newList)
@@ -149,7 +149,7 @@ public class DataBaseManager
 		}
 	}
 
-	public static void insertManualNote(Connection connection, Vector<String[]> newList) throws SQLException
+	private static void insertManualNote(Connection connection, Vector<String[]> newList) throws SQLException
 	{
 		PreparedStatement preparedStatement = connection.prepareStatement("insert into '" + dataTable + "'" + "values(?, ?, ?, ?);");
 		for (String[] strings : newList)
@@ -164,6 +164,55 @@ public class DataBaseManager
 		preparedStatement.executeBatch();
 	}
 
+	private static void dataBaseTables(Connection connection) throws SQLException
+	{
+		// Get information about tables in our database
+		DatabaseMetaData metaData = connection.getMetaData();
+		ResultSet resultSetting = metaData.getTables(null, null, null, new String[]{"TABLE"});
+		System.out.println("Printing TABLE_TYPE \"TABLE\" ");
+		System.out.println("----------------------------------");
+		while(resultSetting.next())
+		{
+			System.out.println(resultSetting.getString("TABLE_NAME"));
+		}
+		System.out.println("------");
+		System.out.println("------\n");
+	}
+
+	private static void getUsers(Connection connection) throws SQLException
+	{
+		// Get information about users
+		Statement statement = connection.createStatement();
+		ResultSet data = statement.executeQuery(DataBaseManager.users_query);
+		System.out.println("Printing \"Users\"");
+		System.out.println("----------------------------------");
+		while (data.next())
+		{
+			System.out.println("User: " + data.getString(1));
+		}
+		System.out.println("------");
+		System.out.println("------\n");
+		statement.close();
+		data.close();
+	}
+
+	private static void getNotes(Connection connection) throws SQLException
+	{
+		Statement statement = connection.createStatement();
+		ResultSet data = statement.executeQuery(DataBaseManager.data_query);
+		System.out.println("Printing \"Notes\"");
+		System.out.println("----------------------------------");
+		while (data.next())
+		{
+			System.out.print("User: " + data.getString(1) + "| ");
+			System.out.print("Title: " + data.getString(2) + "\n");
+			System.out.print("Content:\n" + data.getString(3) + "\n");
+			System.out.print("Last modified: " + data.getDate(4) + "\n");
+			System.out.println("---");
+		}
+		System.out.println("------");
+	}
+
     public static void main(String[] args)
     {
 	    Connection connection = null;
@@ -171,49 +220,11 @@ public class DataBaseManager
 	        String URL = "jdbc:sqlite:F:\\Desktop\\JDBC\\chinook.db";
 	        connection = DriverManager.getConnection(URL);
 
-	        // Get information about tables in our database
-			DatabaseMetaData metaData = connection.getMetaData();
-			ResultSet resultSetting = metaData.getTables(null, null, null, new String[]{"TABLE"});
-			System.out.println("Printing TABLE_TYPE \"TABLE\" ");
-			System.out.println("----------------------------------");
-			while(resultSetting.next())
-			{
-				System.out.println(resultSetting.getString("TABLE_NAME"));
-			}
-			System.out.println("------");
-			System.out.println("------\n");
-
-			// Get information about users
-			Statement statement = connection.createStatement();
-			ResultSet data = statement.executeQuery(DataBaseManager.users_query);
-
-			System.out.println("Printing \"Users\"");
-			System.out.println("----------------------------------");
-			while (data.next())
-			{
-				System.out.println("User: " + data.getString(1));
-			}
-			System.out.println("------");
-			System.out.println("------\n");
-
-			data.close();
-
-			data = statement.executeQuery(DataBaseManager.data_query);
-
-			System.out.println("Printing \"Notes\"");
-			System.out.println("----------------------------------");
-			while (data.next())
-			{
-				System.out.print("User: " + data.getString(1) + "| ");
-				System.out.print("Title: " + data.getString(2) + "\n");
-				System.out.print("Content:\n" + data.getString(3) + "\n");
-				System.out.print("Last modified: " + data.getDate(4) + "\n");
-				System.out.println("---");
-			}
-			System.out.println("------");
-
-			// Creating my table
+	        dataBaseTables(connection);
+	        getUsers(connection);
+	        getNotes(connection);
 			user_interface(connection);
+
         } catch (SQLException e) {
 	        e.printStackTrace();
         } finally {
