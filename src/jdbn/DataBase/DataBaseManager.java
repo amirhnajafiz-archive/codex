@@ -22,6 +22,9 @@ public class DataBaseManager
 						"insert note    : insert new notes to database\n" +
 						"delete user    : remove users from database\n" +
 						"delete note    : remove notes from database\n" +
+						"users 			: see all users\n" +
+						"notes 			: see all notes\n" +
+						"tables 		: see all database tables\n" +
 						"terminate      : exit from JDBNote database manager\n"
 		);
 	}
@@ -93,6 +96,15 @@ public class DataBaseManager
 						break;
 					case "delete note":
 						removeManualNote(connection, getInput(scanner));
+						break;
+					case "users":
+						getUsers(connection);
+						break;
+					case "notes":
+						getNotes(connection);
+						break;
+					case "tables":
+						dataBaseTables(connection);
 						break;
 					case "help":
 						helpMenu();
@@ -237,9 +249,6 @@ public class DataBaseManager
 	        String URL = "jdbc:sqlite:F:\\Desktop\\JDBC\\chinook.db";
 	        connection = DriverManager.getConnection(URL);
 
-	        dataBaseTables(connection);
-	        getUsers(connection);
-	        getNotes(connection);
 			user_interface(connection);
 
         } catch (SQLException e) {
