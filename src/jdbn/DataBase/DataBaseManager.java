@@ -36,7 +36,6 @@ public class DataBaseManager
 	public static void insertManualNote(Connection connection, Vector<String[]> newList) throws SQLException
 	{
 		PreparedStatement preparedStatement = connection.prepareStatement("insert into '" + dataTable + "'" + "values(?, ?, ?, ?);");
-
 		for (String[] strings : newList)
 		{
 			for (int i = 1; i < 4; i++)
@@ -46,8 +45,7 @@ public class DataBaseManager
 			preparedStatement.setDate(4, new Date(System.currentTimeMillis()));
 			preparedStatement.addBatch();
 		}
-
-		preparedStatement.executeUpdate();
+		preparedStatement.executeBatch();
 	}
 
     public static void main(String[] args)
@@ -71,26 +69,29 @@ public class DataBaseManager
 
 			// Get information about users
 			Statement statement = connection.createStatement();
-			ResultSet users = statement.executeQuery(DataBaseManager.users_query);
-			ResultSet notes = statement.executeQuery(DataBaseManager.data_query);
+			ResultSet data = statement.executeQuery(DataBaseManager.users_query);
 
 			System.out.println("Printing \"Users\"");
 			System.out.println("----------------------------------");
-			while (users.next())
+			while (data.next())
 			{
-				System.out.println("User: " + users.getString(1));
+				System.out.println("User: " + data.getString(1));
 			}
 			System.out.println("------");
 			System.out.println("------\n");
 
+			data.close();
+
+			data = statement.executeQuery(DataBaseManager.data_query);
+
 			System.out.println("Printing \"Notes\"");
 			System.out.println("----------------------------------");
-			while (notes.next())
+			while (data.next())
 			{
-				System.out.print("User: " + notes.getString(1) + "| ");
-				System.out.print("Title: " + notes.getString(2) + "\n");
-				System.out.print("Content:\n" + notes.getString(3) + "\n");
-				System.out.print("Last modified: " + notes.getDate(4) + "\n");
+				System.out.print("User: " + data.getString(1) + "| ");
+				System.out.print("Title: " + data.getString(2) + "\n");
+				System.out.print("Content:\n" + data.getString(3) + "\n");
+				System.out.print("Last modified: " + data.getDate(4) + "\n");
 				System.out.println("---");
 			}
 			System.out.println("------");
