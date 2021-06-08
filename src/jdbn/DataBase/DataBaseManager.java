@@ -1,8 +1,8 @@
 package jdbn.DataBase;
 
 import java.sql.*;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Scanner;
 import java.util.Vector;
 
 public class DataBaseManager
@@ -12,6 +12,49 @@ public class DataBaseManager
 
 	private static String users_query = "select * from '" + DataBaseManager.mainTable + "'";
 	private static String data_query = "select * from '" + DataBaseManager.dataTable + "'";
+
+	private static void user_interface(Connection connection)
+	{
+		Scanner scanner = new Scanner(System.in);
+		boolean flag = true;
+		String order;
+
+		System.out.println(">> Welcome to JDBNote database manager:");
+		while (flag)
+		{
+			try {
+				System.out.print("> ");
+				order = scanner.nextLine();
+				switch (order) {
+					case "init":
+						initializeTables(connection);
+						break;
+					case "insert users":
+						insertManualUser(connection, new Vector<>());
+						break;
+					case "insert note":
+						insertManualNote(connection, new Vector<>());
+						break;
+					case "delete user":
+						removeManualUser(connection, new Vector<>());
+						break;
+					case "delete note":
+						removeManualNote(connection, new Vector<>());
+						break;
+					case "terminate":
+						flag = false;
+						break;
+					default:
+						System.out.println(">>> No such command.");
+				}
+			} catch (SQLException e) {
+				System.out.println(">>> " + e.getMessage());
+			} finally {
+				System.out.println("------");
+				System.out.println("------\n");
+			}
+		}
+	}
 
 	public static void initializeTables(Connection connection)
 	{
@@ -131,7 +174,7 @@ public class DataBaseManager
 			System.out.println("------");
 
 			// Creating my table
-			initializeTables(connection);
+			user_interface(connection);
         } catch (SQLException e) {
 	        e.printStackTrace();
         } finally {
