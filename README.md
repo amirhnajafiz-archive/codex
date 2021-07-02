@@ -1,7 +1,6 @@
 # JDBNote
 <p align="center">
-    <img src="./assets/sqlite.png" width="450" />
-    <img src="./assets/jdbc.webp" width="450" />
+    <img src="./assets/jdbc.webp" width="250" />
 </p>
 JDBNote is a Java notepad application.
 
@@ -18,6 +17,9 @@ Check the *Server* package to see the classes that are used to implement the
 server side.
 
 ## Database
+<p align="center">
+    <img src="./assets/sqlite.png" width="100" />
+</p>
 For database I used the SQLite jdbc to create a virtual database and connect
 my server to the database.
 
