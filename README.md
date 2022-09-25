@@ -1,7 +1,11 @@
-# JDBNote
+<h1 align="center">
+JDBNote
+</h1>
+
 <p align="center">
     <img src="./assets/jdbc.webp" width="250" />
 </p>
+
 JDBNote is a Java notepad application.
 
 ## Features
