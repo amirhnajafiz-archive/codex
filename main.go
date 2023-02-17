@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -77,5 +77,9 @@ func main() {
 		panic(err)
 	}
 
-	log.Println(r)
+	if r.Error == "" {
+		fmt.Println(r.Output)
+	} else {
+		fmt.Println(r.Error)
+	}
 }
