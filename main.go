@@ -36,16 +36,21 @@ func read(path string) (string, error) {
 func main() {
 	var (
 		FilePath  = flag.String("f", "", "input file")
-		Extention = flag.String("e", "", "code programming language")
+		Extension = flag.String("e", "", "code programming language")
 		Input     = flag.String("i", "", "code input")
 	)
 
 	flag.Parse()
 
+	content, err := read(*FilePath)
+	if err != nil {
+		panic(err)
+	}
+
 	queryParams := url.Values{
-		"code":     {"val = int(input()) + 5\nprint(val)"},
-		"language": {"py"},
-		"input":    {"7"},
+		"code":     {content},
+		"language": {*Extension},
+		"input":    {*Input},
 	}
 
 	payload := bytes.NewReader([]byte(queryParams.Encode()))
