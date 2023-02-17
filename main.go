@@ -15,15 +15,6 @@ const (
 	apiUrl = "https://api.codex.jaagrav.in"
 )
 
-type Response struct {
-	TimeStamp int    `json:"timeStamp"`
-	Status    int    `json:"status"`
-	Output    string `json:"output"`
-	Error     string `json:"error"`
-	Language  string `json:"language"`
-	Info      string `json:"info"`
-}
-
 func read(path string) (string, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {
@@ -34,6 +25,7 @@ func read(path string) (string, error) {
 }
 
 func main() {
+	// program flags
 	var (
 		FilePath  = flag.String("f", "", "input file")
 		Extension = flag.String("e", "", "code programming language")
@@ -42,11 +34,13 @@ func main() {
 
 	flag.Parse()
 
+	// get input file
 	content, err := read(*FilePath)
 	if err != nil {
 		panic(err)
 	}
 
+	// create payload content
 	queryParams := url.Values{
 		"code":     {content},
 		"language": {*Extension},
@@ -56,6 +50,7 @@ func main() {
 	payload := bytes.NewReader([]byte(queryParams.Encode()))
 	client := http.Client{}
 
+	// create http request
 	req, _ := http.NewRequest(http.MethodPost, apiUrl, payload)
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 
@@ -64,6 +59,17 @@ func main() {
 		panic(err)
 	}
 
+	// create response struct
+	type Response struct {
+		TimeStamp int    `json:"timeStamp"`
+		Status    int    `json:"status"`
+		Output    string `json:"output"`
+		Error     string `json:"error"`
+		Language  string `json:"language"`
+		Info      string `json:"info"`
+	}
+
+	// get response
 	var r Response
 
 	bytesString, _ := io.ReadAll(resp.Body)
