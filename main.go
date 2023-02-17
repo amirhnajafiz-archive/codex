@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"io"
 	"log"
 	"net/http"
@@ -33,6 +34,14 @@ func read(path string) (string, error) {
 }
 
 func main() {
+	var (
+		FilePath  = flag.String("f", "", "input file")
+		Extention = flag.String("e", "", "code programming language")
+		Input     = flag.String("i", "", "code input")
+	)
+
+	flag.Parse()
+
 	queryParams := url.Values{
 		"code":     {"val = int(input()) + 5\nprint(val)"},
 		"language": {"py"},
