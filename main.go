@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 )
 
 const (
@@ -20,6 +21,15 @@ type Response struct {
 	Error     string `json:"error"`
 	Language  string `json:"language"`
 	Info      string `json:"info"`
+}
+
+func read(path string) (string, error) {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
 }
 
 func main() {
