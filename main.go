@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	url2 = "https://api.codex.jaagrav.in"
+	apiUrl = "https://api.codex.jaagrav.in"
 )
 
 func main() {
@@ -19,12 +19,10 @@ func main() {
 		"input":    {"7"},
 	}
 
+	payload := bytes.NewReader([]byte(queryParams.Encode()))
 	client := http.Client{}
 
-	address := url2 + "?" + queryParams.Encode()
-	log.Println(address)
-
-	req, _ := http.NewRequest(http.MethodPost, url2, bytes.NewReader([]byte(queryParams.Encode())))
+	req, _ := http.NewRequest(http.MethodPost, apiUrl, payload)
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 
 	resp, err := client.Do(req)
@@ -32,7 +30,7 @@ func main() {
 		panic(err)
 	}
 
-	be, _ := io.ReadAll(resp.Body)
+	responseString, _ := io.ReadAll(resp.Body)
 
-	log.Println(string(be))
+	log.Println(string(responseString))
 }
