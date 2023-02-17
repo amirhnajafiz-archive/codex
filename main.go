@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -11,6 +12,15 @@ import (
 const (
 	apiUrl = "https://api.codex.jaagrav.in"
 )
+
+type Response struct {
+	TimeStamp int    `json:"timeStamp"`
+	Status    int    `json:"status"`
+	Output    string `json:"output"`
+	Error     string `json:"error"`
+	Language  string `json:"language"`
+	Info      string `json:"info"`
+}
 
 func main() {
 	queryParams := url.Values{
@@ -30,7 +40,12 @@ func main() {
 		panic(err)
 	}
 
-	responseString, _ := io.ReadAll(resp.Body)
+	var r Response
 
-	log.Println(string(responseString))
+	bytesString, _ := io.ReadAll(resp.Body)
+	if err := json.Unmarshal(bytesString, &r); err != nil {
+		panic(err)
+	}
+
+	log.Println(r)
 }
