@@ -2,34 +2,29 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 )
 
-type Object struct {
-	Code     string `json:"code"`
-	Language string `json:"language"`
-	Input    string `json:"input"`
-}
-
 const (
-	url = "https://api.codex.jaagrav.in"
+	url2 = "https://api.codex.jaagrav.in"
 )
 
 func main() {
-	obj := Object{
-		Code:     "val = int(input('Enter your value: ')) + 5\nprint(val)",
-		Language: "py",
-		Input:    "7",
+	queryParams := url.Values{
+		"code":     {"val = int(input()) + 5\nprint(val)"},
+		"language": {"py"},
+		"input":    {"7"},
 	}
-
-	b, _ := json.Marshal(&obj)
 
 	client := http.Client{}
 
-	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewReader(b))
+	address := url2 + "?" + queryParams.Encode()
+	log.Println(address)
+
+	req, _ := http.NewRequest(http.MethodPost, url2, bytes.NewReader([]byte(queryParams.Encode())))
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 
 	resp, err := client.Do(req)
