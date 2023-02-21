@@ -6,9 +6,12 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"os"
+	"reflect"
 )
 
 const (
@@ -50,14 +53,25 @@ func main() {
 	payload := bytes.NewReader([]byte(queryParams.Encode()))
 	client := http.Client{}
 
+	// check the query string
+	log.Printf("query string:\n%s\n\n", queryParams.Encode())
+
 	// create http request
 	req, _ := http.NewRequest(http.MethodPost, apiUrl, payload)
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
+
+	// check the request
+	reqDump, _ := httputil.DumpRequest(req, true)
+	log.Printf("request:\n%s\n\n", reqDump)
 
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
 	}
+
+	// check the response
+	respDump, _ := httputil.DumpResponse(resp, true)
+	log.Printf("response:\n%s\n\n", respDump)
 
 	// create response struct
 	type Response struct {
@@ -77,9 +91,20 @@ func main() {
 		panic(err)
 	}
 
+	fmt.Println("fields:")
+
+	t := reflect.TypeOf(r)
+	for i := 0; i < t.NumField(); i++ {
+		f := t.Field(i)
+
+		fmt.Printf("%s: %s\n", f.Name, f.Type)
+	}
+
+	fmt.Printf("\noutput:\n")
+
 	if r.Error == "" {
-		fmt.Println(r.Output)
+		log.Println(r.Output)
 	} else {
-		fmt.Println(r.Error)
+		log.Println(r.Error)
 	}
 }
