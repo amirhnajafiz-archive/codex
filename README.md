@@ -2,7 +2,7 @@
 
 <br />
 
-Let's make a http request into CodeX api.
+Let's make a http request into CodeX api to see how we can work with CodeX.
 
 ## Test
 
